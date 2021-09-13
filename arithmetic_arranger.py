@@ -99,7 +99,15 @@ def calculate_the_result(front_operand: int, back_operand: int, operator: str) -
             raise Exception("Error: First value must be greater than second value")
         return front_operand - back_operand
 
-def extract_digits(ls: list, sanity_checker_func: callable):
+def extract_digits(ls: list, sanity_checker_func: callable) -> list:
+    """extract_digits.
+
+    :param ls:
+    :type ls: list
+    :param sanity_checker_func:
+    :type sanity_checker_func: callable
+    :rtype: list
+    """
     problem_solutions = []
     if sanity_checker_func(ls):
         for i in ls:
@@ -138,7 +146,7 @@ def extract_digits(ls: list, sanity_checker_func: callable):
                 # add the operator to the result list
                 result.append('-')
                 problem_solutions.append(tuple(result))
-        print(problem_solutions)
+    return problem_solutions
 
 def display_solutions_with_results():
     pass
