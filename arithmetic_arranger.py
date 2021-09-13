@@ -30,8 +30,8 @@ def four_digits_check(my_list: list) -> bool:
     :type my_list: list
     :rtype: bool
     """
-    back_operand_count = 0
     for i in my_list:
+        back_operand_count = 0
         if '+' in i:
             if i[0:i.index('+') + 1][4].isdigit():
                 raise Exception('Error: Numbers cannot be more than four digits')
