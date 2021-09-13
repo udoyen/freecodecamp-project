@@ -79,14 +79,66 @@ def sanity_check(my_list: list) -> bool:
                     return True
     return False
 
+def calculate_the_result(front_operand: int, back_operand: int, operator: str) -> int:
+    """calculate_the_result.
+
+    :param front_operand:
+    :type front_operand: int
+    :param back_operand:
+    :type back_operand: int
+    :param operator:
+    :type operator: str
+    :rtype: int
+    """
+    if operator == '+':
+        if back_operand > front_operand:
+            raise Exception('Error: First value must be greater then second value')
+        return front_operand + back_operand
+    else:
+        if back_operand > front_operand:
+            raise Exception("Error: First value must be greater than second value")
+        return front_operand - back_operand
+
 def extract_digits(ls: list, sanity_checker_func: callable):
     problem_solutions = []
     if sanity_checker_func(ls):
-
-        print("hello")
-
-def calculate_solution(first_value: int, second_value: int) -> int:
-    pass
+        for i in ls:
+            result = []
+            if '+' in i:
+                front_operand = i[0:i.index('+') + 1]
+                back_operand =  i[i.index('+'):]
+                for j in front_operand:
+                    if not j.isdigit():
+                        result.append(int(front_operand[0:front_operand.index(j)]))
+                        break
+                for k in back_operand:
+                    if k.isdigit():
+                        result.append(int(back_operand[back_operand.index(k):]))
+                        break
+                # get the final value and
+                # create a tuple from the result list
+                result.append(calculate_the_result(result[0], result[1], '+'))
+                # add the operator to the result list
+                result.append('+')
+                problem_solutions.append(tuple(result))
+            else:
+                front_operand = i[0:i.index('-') + 1]
+                back_operand =  i[i.index('-'):]
+                for j in front_operand:
+                    if not j.isdigit():
+                        result.append(int(front_operand[0:front_operand.index(j)]))
+                        break
+                for k in back_operand:
+                    if k.isdigit():
+                        result.append(int(back_operand[back_operand.index(k):]))
+                        break
+                # get the final value and
+                # create a tuple from the result list
+                result.append(calculate_the_result(result[0], result[1], '-'))
+                # add the operator to the result list
+                result.append('-')
+                problem_solutions.append(tuple(result))
+        print(problem_solutions)
 
 def display_solutions_with_results():
     pass
