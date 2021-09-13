@@ -32,14 +32,24 @@ def four_digits_check(my_list: list) -> bool:
     """
     back_operand_count = 0
     for i in my_list:
-        if i[0:i.index('+') + 1][4].isdigit():
-            raise Exception('Error: Numbers cannot be more than four digits')
-        back_operand = i[i.index('+'):]
-        for j in back_operand:
-            if j.isdigit():
-                back_operand_count += 1
-                if back_operand_count > 4:
-                    raise ValueError('Error: Numbers cannot be more than four digits')
+        if '+' in i:
+            if i[0:i.index('+') + 1][4].isdigit():
+                raise Exception('Error: Numbers cannot be more than four digits')
+            back_operand = i[i.index('+'):]
+            for j in back_operand:
+                if j.isdigit():
+                    back_operand_count += 1
+                    if back_operand_count > 4:
+                        raise ValueError('Error: Numbers cannot be more than four digits')
+        else:
+            if i[0:i.index('-') + 1][4].isdigit():
+                raise Exception('Error: Numbers cannot be more than four digits')
+            back_operand = i[i.index('-'):]
+            for j in back_operand:
+                if j.isdigit():
+                    back_operand_count += 1
+                    if back_operand_count > 4:
+                        raise ValueError('Error: Numbers cannot be more than four digits')
     return True
 
 def digits_check(my_list: list) -> bool:
@@ -69,8 +79,10 @@ def sanity_check(my_list: list) -> bool:
                     return True
     return False
 
-def extract_digits(ls: list, sanity_checker_func):
+def extract_digits(ls: list, sanity_checker_func: callable):
+    problem_solutions = []
     if sanity_checker_func(ls):
+
         print("hello")
 
 def calculate_solution(first_value: int, second_value: int) -> int:
@@ -82,7 +94,7 @@ def display_solutions_with_results():
 def display_solutions_without_results():
     pass
 
-def arithmetic_arranger(my_list: list, result=False) -> None:
+def arithmetic_arranger(my_list: list, result: bool = False) -> None:
     """arithmetic_arranger.
 
     :param my_list:
