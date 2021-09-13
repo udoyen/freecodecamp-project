@@ -32,10 +32,15 @@ def four_digits_check(my_list: list) -> bool:
     """
     for i in my_list:
         back_operand_count = 0
+        front_operand_count = 0
         if '+' in i:
             try:
-                if i[0:i.index('+') + 1][4].isdigit():
-                    raise Exception('Error: Numbers cannot be more than four digits')
+                front_operand = i[0:i.index('+') + 1]
+                for k in front_operand:
+                    if k.isdigit():
+                        front_operand_count += 1
+                        if front_operand_count > 4:
+                            raise Exception('Error: Numbers cannot be more than four digits')
                 back_operand = i[i.index('+'):]
                 for j in back_operand:
                     if j.isdigit():
@@ -46,8 +51,13 @@ def four_digits_check(my_list: list) -> bool:
                 print("Error: Empty list found")
         else:
             try:
-                if i[0:i.index('-') + 1][4].isdigit():
-                    raise Exception('Error: Numbers cannot be more than four digits')
+                front_operand = i[0:i.index('+') + 1]
+                for k in front_operand:
+                    if k.isdigit():
+                        front_operand_count += 1
+                        if front_operand_count > 4:
+                            raise Exception('Error: Numbers cannot be more than four digits')
+                back_operand = i[i.index('+'):]
                 back_operand = i[i.index('-'):]
                 for j in back_operand:
                     if j.isdigit():
@@ -105,6 +115,43 @@ def calculate_the_result(front_operand: int, back_operand: int, operator: str) -
             raise Exception("Error: First value must be greater than second value")
         return front_operand - back_operand
 
+def extract_digits_helper(item: str) -> list:
+    result = []
+    if '+' in item:
+        front_operand = item[0:item.index('+') + 1]
+        back_operand =  item[item.index('+'):]
+        for j in front_operand:
+            if not j.isdigit():
+                result.append(int(front_operand[0:front_operand.index(j)]))
+                break
+        for k in back_operand:
+            if k.isdigit():
+                result.append(int(back_operand[back_operand.index(k):]))
+                break
+        # get the final value and
+        # create a tuple from the result list
+        result.append(calculate_the_result(result[0], result[1], '+'))
+        # add the operator to the result list
+        result.append('+')
+
+    else:
+        front_operand = item[0:item.index('-') + 1]
+        back_operand =  item[item.index('-'):]
+        for j in front_operand:
+            if not j.isdigit():
+                result.append(int(front_operand[0:front_operand.index(j)]))
+                break
+        for k in back_operand:
+            if k.isdigit():
+                result.append(int(back_operand[back_operand.index(k):]))
+                break
+        # get the final value and
+        # create a tuple from the result list
+        result.append(calculate_the_result(result[0], result[1], '-'))
+        # add the operator to the result list
+        result.append('-')
+    return result
+
 def extract_digits(ls: list, sanity_checker_func: callable) -> list:
     """extract_digits.
 
@@ -117,42 +164,8 @@ def extract_digits(ls: list, sanity_checker_func: callable) -> list:
     problem_solutions = []
     if sanity_checker_func(ls):
         for i in ls:
-            result = []
             try:
-                if '+' in i:
-                    front_operand = i[0:i.index('+') + 1]
-                    back_operand =  i[i.index('+'):]
-                    for j in front_operand:
-                        if not j.isdigit():
-                            result.append(int(front_operand[0:front_operand.index(j)]))
-                            break
-                    for k in back_operand:
-                        if k.isdigit():
-                            result.append(int(back_operand[back_operand.index(k):]))
-                            break
-                    # get the final value and
-                    # create a tuple from the result list
-                    result.append(calculate_the_result(result[0], result[1], '+'))
-                    # add the operator to the result list
-                    result.append('+')
-                    problem_solutions.append(tuple(result))
-                else:
-                    front_operand = i[0:i.index('-') + 1]
-                    back_operand =  i[i.index('-'):]
-                    for j in front_operand:
-                        if not j.isdigit():
-                            result.append(int(front_operand[0:front_operand.index(j)]))
-                            break
-                    for k in back_operand:
-                        if k.isdigit():
-                            result.append(int(back_operand[back_operand.index(k):]))
-                            break
-                    # get the final value and
-                    # create a tuple from the result list
-                    result.append(calculate_the_result(result[0], result[1], '-'))
-                    # add the operator to the result list
-                    result.append('-')
-                    problem_solutions.append(tuple(result))
+                problem_solutions.append(tuple(extract_digits_helper(i)))
             except ValueError:
                 print("Error: Empty list found")
     return problem_solutions
