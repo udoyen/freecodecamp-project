@@ -6,7 +6,8 @@ def problems_number_limit_check(my_list: list) -> bool:
     :rtype: bool
     """
     if len(my_list) > 5:
-        raise Exception('Error: Too many problems')
+        print('Error: Too many problems.')
+        return False
     return True
 
 
@@ -51,8 +52,8 @@ def four_digits_check(my_list: list) -> bool:
                         if back_operand_count > 4:
                             raise ValueError(
                                 'Error: Numbers cannot be more than four digits')
-            except ValueError as e:
-                print(f"Error: 3 Empty list found {e}")
+            except ValueError as e_err:
+                print(f"Error: 3 Empty list found {e_err}")
         else:
             try:
                 front_operand = i[0:i.index('-') + 1]
@@ -70,8 +71,8 @@ def four_digits_check(my_list: list) -> bool:
                         if back_operand_count > 4:
                             raise ValueError(
                                 'Error: Numbers cannot be more than four digits')
-            except ValueError as e:
-                print(f"Error: 2 Empty list found {e}")
+            except ValueError as e_err:
+                print(f"Error: 2 Empty list found {e_err}")
     return True
 
 
@@ -117,11 +118,16 @@ def calculate_the_result(front_operand: int, back_operand: int, operator: str) -
     """
     if operator == '+':
         return front_operand + back_operand
-    else:
-        return front_operand - back_operand
+    return front_operand - back_operand
 
 
 def extract_digits_helper(item: str) -> list:
+    """extract_digits_helper.
+
+    :param item:
+    :type item: str
+    :rtype: list
+    """
     result = []
     if '+' in item:
         front_operand = item[0:item.index('+') + 1]
@@ -159,26 +165,27 @@ def extract_digits_helper(item: str) -> list:
     return result
 
 
-def extract_digits(ls: list, sanity_checker_func: callable) -> list:
+def extract_digits(my_ls: list, sanity_checker_func: callable) -> list:
     """extract_digits.
 
-    :param ls:
-    :type ls: list
+    :param my_ls:
+    :type my_ls: list
     :param sanity_checker_func:
     :type sanity_checker_func: callable
     :rtype: list
     """
     problem_solutions = []
-    if sanity_checker_func(ls):
-        for i in ls:
+    if sanity_checker_func(my_ls):
+        for i in my_ls:
             try:
                 problem_solutions.append(tuple(extract_digits_helper(i)))
-            except ValueError as e:
-                print(f"Error: 1 Empty list found {e}")
-    return problem_solutions
+            except ValueError as e_err:
+                print(f"Error: 1 Empty list found {e_err}")
+        return problem_solutions
+    return []
 
 
-def calculate_line(result: dict, master_key: int, front_operand_key: int, back_operand_key: int) -> str:
+def calculate_line(result: dict, master_key: int, front_operand_key: int, back_operand_key: int) -> any:
     """calculate_line.
 
     :param result:
@@ -189,7 +196,7 @@ def calculate_line(result: dict, master_key: int, front_operand_key: int, back_o
     :type front_operand_key: int
     :param back_operand_key:
     :type back_operand_key: int
-    :rtype: str
+    :rtype: any
     """
     if result.get(master_key):
         try:
@@ -197,11 +204,10 @@ def calculate_line(result: dict, master_key: int, front_operand_key: int, back_o
                 multiplier = len(
                     str(result[master_key][front_operand_key])) + 2
                 return "-"*multiplier
-            else:
-                multiplier = len(str(result[master_key][back_operand_key])) + 2
-                return "-"*multiplier
-        except TypeError as e:
-            print(f"Error: calculate line error {e}")
+            multiplier = len(str(result[master_key][back_operand_key])) + 2
+            return "-"*multiplier
+        except TypeError as e_err:
+            print(f"Error: calculate line error {e_err}")
     else:
         return " "
 
@@ -219,8 +225,7 @@ def set_front_operand(result: dict, master_key: int, child_key: int) -> any:
     """
     if result.get(master_key):
         return result[master_key][child_key]
-    else:
-        return ' '
+    return ' '
 
 
 def set_result(result: dict, master_key: int, child_key: int) -> any:
@@ -236,8 +241,7 @@ def set_result(result: dict, master_key: int, child_key: int) -> any:
     """
     if result.get(master_key):
         return result[master_key][child_key]
-    else:
-        return ' '
+    return ' '
 
 
 def set_operator_line(result: dict, master_key: int, front_operand_key, back_operand_key: int, operator_key: int) -> str:
@@ -261,10 +265,8 @@ def set_operator_line(result: dict, master_key: int, front_operand_key, back_ope
         if f_key > b_key:
             multiplier = f_key - b_key
             return str(result[master_key][operator_key]) + ' '*space_multiplier_numbers[multiplier] + str(result[master_key][back_operand_key])
-        else:
-            return str(result[master_key][operator_key]) + ' ' + str(result[master_key][back_operand_key])
-    else:
-        return ' '
+        return str(result[master_key][operator_key]) + ' ' + str(result[master_key][back_operand_key])
+    return ' '
 
 
 def display_solutions_with_results(solutions: list) -> None:
@@ -275,7 +277,6 @@ def display_solutions_with_results(solutions: list) -> None:
     :rtype: None
     """
     results = {}
-    checker = len(solutions)
     for i, value in enumerate(solutions):
         results[i] = {1: value[0], 2: value[1], 3: value[2], 4: value[3]}
 
@@ -321,5 +322,5 @@ def arithmetic_arranger(my_list: list, result: bool = False) -> None:
             display_solutions_with_results(results)
         else:
             display_solutions_without_results(results)
-    except TypeError as e:
-        print(f"Error: arithmetic arranger error {e}")
+    except TypeError as e_err:
+        print(f"Error: arithmetic arranger error {e_err}")
