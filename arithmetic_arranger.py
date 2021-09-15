@@ -1,3 +1,5 @@
+from string import Template
+
 def problems_number_limit_check(my_list: list) -> bool:
     """problems_number_limit_check.
 
@@ -6,7 +8,6 @@ def problems_number_limit_check(my_list: list) -> bool:
     :rtype: bool
     """
     if len(my_list) > 5:
-        print('Error: Too many problems.')
         return False
     return True
 
@@ -20,9 +21,9 @@ def operator_check(my_list: list) -> bool:
     """
     for i in my_list:
         if '*' in i:
-            raise Exception("Error: Operator must be '+' or '-'")
+            return False
         if '/' in i:
-            raise Exception("Error: Operator must be '+' or '-'")
+            return False
     return True
 
 
@@ -43,15 +44,13 @@ def four_digits_check(my_list: list) -> bool:
                     if k.isdigit():
                         front_operand_count += 1
                         if front_operand_count > 4:
-                            raise Exception(
-                                'Error: Numbers cannot be more than four digits')
+                            return False
                 back_operand = i[i.index('+'):]
                 for j in back_operand:
                     if j.isdigit():
                         back_operand_count += 1
                         if back_operand_count > 4:
-                            raise ValueError(
-                                'Error: Numbers cannot be more than four digits')
+                            return False
             except ValueError as e_err:
                 print(f"Error: 3 Empty list found {e_err}")
         else:
@@ -61,16 +60,14 @@ def four_digits_check(my_list: list) -> bool:
                     if k.isdigit():
                         front_operand_count += 1
                         if front_operand_count > 4:
-                            raise Exception(
-                                'Error: Numbers cannot be more than four digits')
+                            return False
                 back_operand = i[i.index('-'):]
                 back_operand = i[i.index('-'):]
                 for j in back_operand:
                     if j.isdigit():
                         back_operand_count += 1
                         if back_operand_count > 4:
-                            raise ValueError(
-                                'Error: Numbers cannot be more than four digits')
+                            return False
             except ValueError as e_err:
                 print(f"Error: 2 Empty list found {e_err}")
     return True
@@ -86,7 +83,7 @@ def digits_check(my_list: list) -> bool:
     for i in my_list:
         for j in i:
             if j.isalpha():
-                raise TypeError('Error: Numbers must only contain digits')
+                return False
     return True
 
 
@@ -165,24 +162,15 @@ def extract_digits_helper(item: str) -> list:
     return result
 
 
-def extract_digits(my_ls: list, sanity_checker_func: callable) -> list:
-    """extract_digits.
-
-    :param my_ls:
-    :type my_ls: list
-    :param sanity_checker_func:
-    :type sanity_checker_func: callable
-    :rtype: list
-    """
+def extract_digits(my_ls: list):
     problem_solutions = []
-    if sanity_checker_func(my_ls):
-        for i in my_ls:
-            try:
-                problem_solutions.append(tuple(extract_digits_helper(i)))
-            except ValueError as e_err:
-                print(f"Error: 1 Empty list found {e_err}")
-        return problem_solutions
-    return []
+
+    for i in my_ls:
+        try:
+            problem_solutions.append(tuple(extract_digits_helper(i)))
+        except ValueError as e_err:
+            print(f"Error: 1 Empty list found {e_err}")
+    return problem_solutions
 
 
 def calculate_line(result: dict, master_key: int, front_operand_key: int, back_operand_key: int) -> any:
@@ -280,15 +268,10 @@ def display_solutions_with_results(solutions: list) -> None:
     for i, value in enumerate(solutions):
         results[i] = {1: value[0], 2: value[1], 3: value[2], 4: value[3]}
 
-    print("{:>6}    {:>6}    {:>6}    {:>6}    {:>6}".format(f'{set_front_operand(results, 0, 1)}', f'{set_front_operand(results, 1, 1)}',
-                                                             f'{set_front_operand(results, 2, 1)}', f'{set_front_operand(results, 3, 1)}', f'{set_front_operand(results, 4, 1)}'))
-    print("{:>6}    {:>6}    {:>6}    {:>6}    {:>6}".format(f"{set_operator_line(results, 0, 1, 2, 4)}", f"{set_operator_line(results, 1, 1, 2, 4)}",
-                                                    f"{set_operator_line(results, 2, 1, 2, 4)}", f"{set_operator_line(results, 3, 1, 2, 4)}",
-                                                    f"{set_operator_line(results, 4, 1, 2, 4)}"))
-    print("{:>6}    {:>6}    {:>6}    {:>6}    {:>6}".format(f"{calculate_line(results, 0, 1, 2)}", f"{calculate_line(results, 1, 1, 2)}",
-                                                            f"{calculate_line(results, 2, 1, 2)}", f"{calculate_line(results, 3, 1, 2)}", f"{calculate_line(results, 4, 1, 2)}"))
-    print("{:>6}    {:>6}    {:>6}    {:>6}    {:>6}".format(f'{set_result(results, 0, 3)}', f'{set_result(results, 1, 3)}',
-                                                             f'{set_result(results, 2, 3)}', f'{set_result(results, 3, 3)}', f'{set_result(results, 4, 3)}'))
+    print(f"{set_front_operand(results, 0, 1):>6}", f"{set_front_operand(results, 1, 1):>6}", f"{set_front_operand(results, 2, 1):>6}", f"{set_front_operand(results, 3, 1):>6}", f"{set_front_operand(results, 4, 1):>6}", sep="    ")
+    print(f"{set_operator_line(results, 0, 1, 2, 4):>6}", f"{set_operator_line(results, 1, 1, 2, 4):>6}", f"{set_operator_line(results, 2, 1, 2, 4):>6}", f"{set_operator_line(results, 3, 1, 2, 4):>6}", f"{set_operator_line(results, 4, 1, 2, 4):>6}", sep="    ")
+    print(f"{calculate_line(results, 0, 1, 2):>6}", f"{calculate_line(results, 1, 1, 2):>6}", f"{calculate_line(results, 2, 1, 2):>6}", f"{calculate_line(results, 3, 1, 2):>6}", f"{calculate_line(results, 4, 1, 2):>6}", sep="    ")
+    print(f"{set_result(results, 0, 3):>6}", f"{set_result(results, 1, 3):>6}", f"{set_result(results, 2, 3):>6}", f"{set_result(results, 3, 3):>6}", f"{set_result(results, 4, 3):>6}", sep="    ")
 
 
 def display_solutions_without_results(solutions: list) -> None:
@@ -301,26 +284,40 @@ def display_solutions_without_results(solutions: list) -> None:
     results = {}
     for i, value in enumerate(solutions):
         results[i] = {1: value[0], 2: value[1], 3: value[2], 4: value[3]}
-    print("{:>6}    {:>6}    {:>6}    {:>6}    {:>6}".format(f'{set_front_operand(results, 0, 1)}', f'{set_front_operand(results, 1, 1)}',
-                                                             f'{set_front_operand(results, 2, 1)}', f'{set_front_operand(results, 3, 1)}', f'{set_front_operand(results, 4, 1)}'))
-    print("{:>6}    {:>6}    {:>6}    {:>6}    {:>6}".format(f"{set_operator_line(results, 0, 1, 2, 4)}", f"{set_operator_line(results, 1, 1, 2, 4)}",
-                                                    f"{set_operator_line(results, 2, 1, 2, 4)}", f"{set_operator_line(results, 3, 1, 2, 4)}",
-                                                    f"{set_operator_line(results, 4, 1, 2, 4)}"))
-    print("{:>6}    {:>6}    {:>6}    {:>6}    {:>6}".format(f"{calculate_line(results, 0, 1, 2)}", f"{calculate_line(results, 1, 1, 2)}",
-                                                            f"{calculate_line(results, 2, 1, 2)}", f"{calculate_line(results, 3, 1, 2)}", f"{calculate_line(results, 4, 1, 2)}"))
+    print("{:>6}    {:>6}    {:>6}    {:>6}    {:>6}".format(f'{set_front_operand(results, 0, 1)}', f'{set_front_operand(results, 1, 1)}', f'{set_front_operand(results, 2, 1)}', f'{set_front_operand(results, 3, 1)}', f'{set_front_operand(results, 4, 1)}'),
+          "{:>6}    {:>6}    {:>6}    {:>6}    {:>6}".format(f"{set_operator_line(results, 0, 1, 2, 4)}", f"{set_operator_line(results, 1, 1, 2, 4)}", f"{set_operator_line(results, 2, 1, 2, 4)}", f"{set_operator_line(results, 3, 1, 2, 4)}", f"{set_operator_line(results, 4, 1, 2, 4)}"),
+          "{:>6}    {:>6}    {:>6}    {:>6}    {:>6}".format(f"{calculate_line(results, 0, 1, 2)}", f"{calculate_line(results, 1, 1, 2)}", f"{calculate_line(results, 2, 1, 2)}", f"{calculate_line(results, 3, 1, 2)}", f"{calculate_line(results, 4, 1, 2)}"), sep="\n")
 
-def arithmetic_arranger(my_list: list, result: bool = False) -> None:
+
+def arithmetic_arranger(my_list: list, result: bool = False) -> any:
     """arithmetic_arranger.
 
     :param my_list:
     :type my_list: list
-    :rtype: None
+    :rtype: any
     """
-    results = extract_digits(my_list, sanity_check)
-    try:
-        if result:
-            display_solutions_with_results(results)
+    problem_count = problems_number_limit_check(my_list)
+    operator_checker = operator_check(my_list)
+    digit_checker = digits_check(my_list)
+    digits_count_checker = four_digits_check(my_list)
+
+    if problem_count:
+        if operator_checker:
+            if digit_checker:
+                if digits_count_checker:
+                    results = extract_digits(my_list)
+                    try:
+                        if result:
+                            display_solutions_with_results(results)
+                        else:
+                            display_solutions_without_results(results)
+                    except TypeError as e_err:
+                        print(f"Error: arithmetic arranger error {e_err}")
+                else:
+                    return 'Error: Numbers cannot be more than four digits.'
+            else:
+                return 'Error: Numbers must only contain digits.'
         else:
-            display_solutions_without_results(results)
-    except TypeError as e_err:
-        print(f"Error: arithmetic arranger error {e_err}")
+            return "Error: Operator must be '+' or '-'."
+    else:
+        return 'Error: Too many problems.'
