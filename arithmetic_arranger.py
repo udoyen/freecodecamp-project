@@ -1,5 +1,3 @@
-from string import Template
-
 def problems_number_limit_check(my_list: list) -> bool:
     """problems_number_limit_check.
 
@@ -268,10 +266,25 @@ def display_solutions_with_results(solutions: list) -> None:
     for i, value in enumerate(solutions):
         results[i] = {1: value[0], 2: value[1], 3: value[2], 4: value[3]}
 
-    print(f"{set_front_operand(results, 0, 1):>6}", f"{set_front_operand(results, 1, 1):>6}", f"{set_front_operand(results, 2, 1):>6}", f"{set_front_operand(results, 3, 1):>6}", f"{set_front_operand(results, 4, 1):>6}", sep="    ")
-    print(f"{set_operator_line(results, 0, 1, 2, 4):>6}", f"{set_operator_line(results, 1, 1, 2, 4):>6}", f"{set_operator_line(results, 2, 1, 2, 4):>6}", f"{set_operator_line(results, 3, 1, 2, 4):>6}", f"{set_operator_line(results, 4, 1, 2, 4):>6}", sep="    ")
-    print(f"{calculate_line(results, 0, 1, 2):>6}", f"{calculate_line(results, 1, 1, 2):>6}", f"{calculate_line(results, 2, 1, 2):>6}", f"{calculate_line(results, 3, 1, 2):>6}", f"{calculate_line(results, 4, 1, 2):>6}", sep="    ")
-    print(f"{set_result(results, 0, 3):>6}", f"{set_result(results, 1, 3):>6}", f"{set_result(results, 2, 3):>6}", f"{set_result(results, 3, 3):>6}", f"{set_result(results, 4, 3):>6}", sep="    ")
+    statements = [
+        f"{set_front_operand(results, 0, 1):>5}", f"{set_front_operand(results, 1, 1):>6}", f"{set_front_operand(results, 2, 1):>6}", f"{set_front_operand(results, 3, 1):>6}", f"{set_front_operand(results, 4, 1):>6}",
+        f"{set_operator_line(results, 0, 1, 2, 4):>5}", f"{set_operator_line(results, 1, 1, 2, 4):>6}", f"{set_operator_line(results, 2, 1, 2, 4):>6}", f"{set_operator_line(results, 3, 1, 2, 4):>6}", f"{set_operator_line(results, 4, 1, 2, 4):>6}",
+        f"{calculate_line(results, 0, 1, 2):>5}", f"{calculate_line(results, 1, 1, 2):>6}", f"{calculate_line(results, 2, 1, 2):>6}", f"{calculate_line(results, 3, 1, 2):>6}", f"{calculate_line(results, 4, 1, 2):>6}",
+        f"{set_result(results, 0, 3):>5}", f"{set_result(results, 1, 3):>6}", f"{set_result(results, 2, 3):>6}", f"{set_result(results, 3, 3):>6}", f"{set_result(results, 4, 3):>6}",
+                ]
+    _assist = {
+        0: [ 0, 5],
+        1: [ 5, 10],
+        2: [ 10, 15],
+        3: [ 15, 20]
+
+    }
+
+    send = ""
+
+    for i in range(0, 4):
+        send +=  "    ".join(statements[_assist[i][0]:_assist[i][1]]) + "\n" if i != 3 else ''
+    return send
 
 
 def display_solutions_without_results(solutions: list) -> None:
@@ -284,9 +297,25 @@ def display_solutions_without_results(solutions: list) -> None:
     results = {}
     for i, value in enumerate(solutions):
         results[i] = {1: value[0], 2: value[1], 3: value[2], 4: value[3]}
-    print("{:>6}    {:>6}    {:>6}    {:>6}    {:>6}".format(f'{set_front_operand(results, 0, 1)}', f'{set_front_operand(results, 1, 1)}', f'{set_front_operand(results, 2, 1)}', f'{set_front_operand(results, 3, 1)}', f'{set_front_operand(results, 4, 1)}'),
-          "{:>6}    {:>6}    {:>6}    {:>6}    {:>6}".format(f"{set_operator_line(results, 0, 1, 2, 4)}", f"{set_operator_line(results, 1, 1, 2, 4)}", f"{set_operator_line(results, 2, 1, 2, 4)}", f"{set_operator_line(results, 3, 1, 2, 4)}", f"{set_operator_line(results, 4, 1, 2, 4)}"),
-          "{:>6}    {:>6}    {:>6}    {:>6}    {:>6}".format(f"{calculate_line(results, 0, 1, 2)}", f"{calculate_line(results, 1, 1, 2)}", f"{calculate_line(results, 2, 1, 2)}", f"{calculate_line(results, 3, 1, 2)}", f"{calculate_line(results, 4, 1, 2)}"), sep="\n")
+
+    statements = [
+        f"{set_front_operand(results, 0, 1):>6}", f"{set_front_operand(results, 1, 1):>6}", f"{set_front_operand(results, 2, 1):>6}", f"{set_front_operand(results, 3, 1):>6}", f"{set_front_operand(results, 4, 1):>6}",
+        f"{set_operator_line(results, 0, 1, 2, 4):>6}".strip(), f"{set_operator_line(results, 1, 1, 2, 4):>6}", f"{set_operator_line(results, 2, 1, 2, 4):>6}", f"{set_operator_line(results, 3, 1, 2, 4):>6}", f"{set_operator_line(results, 4, 1, 2, 4):>6}",
+        f"{calculate_line(results, 0, 1, 2):>6}".strip(), f"{calculate_line(results, 1, 1, 2):>6}", f"{calculate_line(results, 2, 1, 2):>6}", f"{calculate_line(results, 3, 1, 2):>6}", f"{calculate_line(results, 4, 1, 2):>6}",
+                ]
+    _assist = {
+        0: [ 0, 5],
+        1: [ 5, 10],
+        2: [ 10, 15],
+
+    }
+
+    send = ""
+
+    for i in range(0, 3):
+        send +=  "    ".join(statements[_assist[i][0]:_assist[i][1]]) + "\n" if i != 3 else ''
+    return send
+
 
 
 def arithmetic_arranger(my_list: list, result: bool = False) -> any:
@@ -308,9 +337,8 @@ def arithmetic_arranger(my_list: list, result: bool = False) -> any:
                     results = extract_digits(my_list)
                     try:
                         if result:
-                            display_solutions_with_results(results)
-                        else:
-                            display_solutions_without_results(results)
+                            return display_solutions_with_results(results)
+                        return display_solutions_without_results(results)
                     except TypeError as e_err:
                         print(f"Error: arithmetic arranger error {e_err}")
                 else:
