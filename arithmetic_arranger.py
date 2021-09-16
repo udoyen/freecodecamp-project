@@ -272,18 +272,27 @@ def display_solutions_with_results(solutions: list) -> None:
         f"{calculate_line(results, 0, 1, 2):>5}", f"{calculate_line(results, 1, 1, 2):>6}", f"{calculate_line(results, 2, 1, 2):>6}", f"{calculate_line(results, 3, 1, 2):>6}", f"{calculate_line(results, 4, 1, 2):>6}",
         f"{set_result(results, 0, 3):>5}", f"{set_result(results, 1, 3):>6}", f"{set_result(results, 2, 3):>6}", f"{set_result(results, 3, 3):>6}", f"{set_result(results, 4, 3):>6}",
                 ]
+
     _assist = {
-        0: [ 0, 5],
-        1: [ 5, 10],
-        2: [ 10, 15],
-        3: [ 15, 20]
+        0: [0,  len(solutions)],
+        1: [5,  5  + len(solutions)],
+        2: [10, 10 + len(solutions)],
+        3: [15, 15 + len(solutions)]
 
     }
 
     send = ""
 
-    for i in range(0, 4):
-        send +=  "    ".join(statements[_assist[i][0]:_assist[i][1]]) + "\n" if i != 3 else ''
+    for k in _assist:
+        #print("In assist")
+        statements_slice = statements[_assist[k][0]:_assist[k][1]]
+        print(f"Statements: {statements_slice}")
+        if [*_assist.keys()][-1] != k:
+            send += "   ".join(statements_slice)
+            send += "\n"
+        else:
+            send +=  "   ".join(statements_slice)
+
     return send
 
 
@@ -297,23 +306,31 @@ def display_solutions_without_results(solutions: list) -> None:
     results = {}
     for i, value in enumerate(solutions):
         results[i] = {1: value[0], 2: value[1], 3: value[2], 4: value[3]}
-
+    print(f"Solutions: {solutions}")
     statements = [
-        f"{set_front_operand(results, 0, 1):>6}", f"{set_front_operand(results, 1, 1):>6}", f"{set_front_operand(results, 2, 1):>6}", f"{set_front_operand(results, 3, 1):>6}", f"{set_front_operand(results, 4, 1):>6}",
-        f"{set_operator_line(results, 0, 1, 2, 4):>6}".strip(), f"{set_operator_line(results, 1, 1, 2, 4):>6}", f"{set_operator_line(results, 2, 1, 2, 4):>6}", f"{set_operator_line(results, 3, 1, 2, 4):>6}", f"{set_operator_line(results, 4, 1, 2, 4):>6}",
-        f"{calculate_line(results, 0, 1, 2):>6}".strip(), f"{calculate_line(results, 1, 1, 2):>6}", f"{calculate_line(results, 2, 1, 2):>6}", f"{calculate_line(results, 3, 1, 2):>6}", f"{calculate_line(results, 4, 1, 2):>6}",
+        f"{set_front_operand(results, 0, 1):>3}", f"{set_front_operand(results, 1, 1):>6}", f"{set_front_operand(results, 2, 1):>4}", f"{set_front_operand(results, 3, 1):>4}", f"{set_front_operand(results, 4, 1):>4}",
+        f"{set_operator_line(results, 0, 1, 2, 4):>}", f"{set_operator_line(results, 1, 1, 2, 4):>}", f"{set_operator_line(results, 2, 1, 2, 4):>}", f"{set_operator_line(results, 3, 1, 2, 4):>}", f"{set_operator_line(results, 4, 1, 2, 4):>}",
+        f"{calculate_line(results, 0, 1, 2):>}", f"{calculate_line(results, 1, 1, 2):>4}", f"{calculae_line(results, 2, 1, 2):>}", f"{calculate_line(results, 3, 1, 2):>}", f"{calculate_line(results, 4, 1, 2):>}",
                 ]
+    # print(f"One: {statements[0]}")
+    # print(f"Statements: {statements}")
     _assist = {
-        0: [ 0, 5],
-        1: [ 5, 10],
-        2: [ 10, 15],
+        0: [ 0, len(solutions)],
+        1: [ 5, 5 + len(solutions)],
+        2: [ 10, 10 + len(solutions)],
 
     }
 
     send = ""
 
-    for i in range(0, 3):
-        send +=  "    ".join(statements[_assist[i][0]:_assist[i][1]]) + "\n" if i != 3 else ''
+    for k in _assist:
+        statements_slice = statements[_assist[k][0]:_assist[k][1]]
+        print(f"Statements: {statements_slice}")
+        if [*_assist.keys()][-1] != k: # only add newline character if not last key
+            send += "   ".join(statements_slice)
+            send += "\n"
+        else:
+            send +=  "   ".join(statements_slice)
     return send
 
 
@@ -334,7 +351,10 @@ def arithmetic_arranger(my_list: list, result: bool = False) -> any:
         if operator_checker:
             if digit_checker:
                 if digits_count_checker:
-                    results = extract_digits(my_list)
+                    try:
+                        results = extract_digits(my_list)
+                    except TypeError as e_err:
+                        print(f"Error: results error {e_err}")
                     try:
                         if result:
                             return display_solutions_with_results(results)
