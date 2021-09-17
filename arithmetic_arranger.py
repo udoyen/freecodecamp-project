@@ -18,9 +18,7 @@ def operator_check(my_list: list) -> bool:
     :rtype: bool
     """
     for i in my_list:
-        if '*' in i:
-            return False
-        if '/' in i:
+        if '*' in i or '/' in i:
             return False
     return True
 
@@ -33,41 +31,11 @@ def four_digits_check(my_list: list) -> bool:
     :rtype: bool
     """
     for i in my_list:
-        back_operand_count = 0
-        front_operand_count = 0
-        if '+' in i:
-            try:
-                front_operand = i[0:i.index('+') + 1]
-                for k in front_operand:
-                    if k.isdigit():
-                        front_operand_count += 1
-                        if front_operand_count > 4:
-                            return False
-                back_operand = i[i.index('+'):]
-                for j in back_operand:
-                    if j.isdigit():
-                        back_operand_count += 1
-                        if back_operand_count > 4:
-                            return False
-            except ValueError as e_err:
-                print(f"Error: 3 Empty list found {e_err}")
-        else:
-            try:
-                front_operand = i[0:i.index('-') + 1]
-                for k in front_operand:
-                    if k.isdigit():
-                        front_operand_count += 1
-                        if front_operand_count > 4:
-                            return False
-                back_operand = i[i.index('-'):]
-                back_operand = i[i.index('-'):]
-                for j in back_operand:
-                    if j.isdigit():
-                        back_operand_count += 1
-                        if back_operand_count > 4:
-                            return False
-            except ValueError as e_err:
-                print(f"Error: 2 Empty list found {e_err}")
+        items = i.split()
+        back_operand = items[0]
+        front_operand = items[2]
+        if len(back_operand) > 4 or len(front_operand) > 4:
+            return False
     return True
 
 
@@ -189,9 +157,9 @@ def calculate_line(result: dict, master_key: int, front_operand_key: int, back_o
             if len(str(result[master_key][front_operand_key])) > len(str(result[master_key][back_operand_key])):
                 multiplier = len(
                     str(result[master_key][front_operand_key])) + 2
-                return "-"*multiplier
+                return "-" * multiplier
             multiplier = len(str(result[master_key][back_operand_key])) + 2
-            return "-"*multiplier
+            return "-" * multiplier
         except TypeError as e_err:
             print(f"Error: calculate line error {e_err}")
     else:
@@ -272,7 +240,6 @@ def set_back_operand_helper(result: dict, master_key: int) -> str:
     }
 
     # check which is the bigger of the two operands
-    print(f"Master key 1: {len(str(result[master_key][2]))}")
     if len(str(result[master_key][2])) >= len(str(result[master_key][1])):
         # return the space padded string
         return '''{0:>{1}}'''.format(result[master_key][2], len(str(result[master_key][2])) + 1)
@@ -309,15 +276,20 @@ def display_solutions_with_results(solutions: list) -> str:
     for i, value in enumerate(solutions):
         results[i] = {1: value[0], 2: value[1], 3: value[2], 4: value[3]}
     statements = [
-        f"{set_front_operand(results, 0)}", f"{set_front_operand(results, 1)}", f"{set_front_operand(results, 2)}", f"{set_front_operand(results, 3)}", f"{set_front_operand(results, 4)}",
-        f"{set_operator_line(results, 0)}", f"{set_operator_line(results, 1)}", f"{set_operator_line(results, 2)}", f"{set_operator_line(results, 3)}", f"{set_operator_line(results, 4)}",
-        f"{calculate_line(results, 0, 1, 2):>}", f"{calculate_line(results, 1, 1, 2):>}", f"{calculate_line(results, 2, 1, 2):>}", f"{calculate_line(results, 3, 1, 2):>}", f"{calculate_line(results, 4, 1, 2):>}",
-        f"{set_result(results, 0, 3):>}", f"{set_result(results, 1, 3):>}", f"{set_result(results, 2, 3):>}", f"{set_result(results, 3, 3):>}", f"{set_result(results, 4, 3):>}",
-                ]
+        f"{set_front_operand(results, 0)}", f"{set_front_operand(results, 1)}", f"{set_front_operand(results, 2)}",
+        f"{set_front_operand(results, 3)}", f"{set_front_operand(results, 4)}",
+        f"{set_operator_line(results, 0)}", f"{set_operator_line(results, 1)}", f"{set_operator_line(results, 2)}",
+        f"{set_operator_line(results, 3)}", f"{set_operator_line(results, 4)}",
+        f"{calculate_line(results, 0, 1, 2):>}", f"{calculate_line(results, 1, 1, 2):>}",
+        f"{calculate_line(results, 2, 1, 2):>}", f"{calculate_line(results, 3, 1, 2):>}",
+        f"{calculate_line(results, 4, 1, 2):>}",
+        f"{set_result(results, 0, 3):>}", f"{set_result(results, 1, 3):>}", f"{set_result(results, 2, 3):>}",
+        f"{set_result(results, 3, 3):>}", f"{set_result(results, 4, 3):>}",
+    ]
 
     _assist = {
-        0: [0,  len(solutions)],
-        1: [5,  5 + len(solutions)],
+        0: [0, len(solutions)],
+        1: [5, 5 + len(solutions)],
         2: [10, 10 + len(solutions)],
         3: [15, 15 + len(solutions)]
 
@@ -349,10 +321,14 @@ def display_solutions_without_results(solutions: list) -> str:
     for i, value in enumerate(solutions):
         results[i] = {1: value[0], 2: value[1], 3: value[2], 4: value[3]}
     statements = [
-        f"{set_front_operand(results, 0)}", f"{set_front_operand(results, 1)}", f"{set_front_operand(results, 2)}", f"{set_front_operand(results, 3)}", f"{set_front_operand(results, 4)}",
-        f"{set_operator_line(results, 0)}", f"{set_operator_line(results, 1)}", f"{set_operator_line(results, 2)}", f"{set_operator_line(results, 3)}", f"{set_operator_line(results, 4)}",
-        f"{calculate_line(results, 0, 1, 2):>}", f"{calculate_line(results, 1, 1, 2):>}", f"{calculate_line(results, 2, 1, 2):>}", f"{calculate_line(results, 3, 1, 2):>}", f"{calculate_line(results, 4, 1, 2):>}",
-                ]
+        f"{set_front_operand(results, 0)}", f"{set_front_operand(results, 1)}", f"{set_front_operand(results, 2)}",
+        f"{set_front_operand(results, 3)}", f"{set_front_operand(results, 4)}",
+        f"{set_operator_line(results, 0)}", f"{set_operator_line(results, 1)}", f"{set_operator_line(results, 2)}",
+        f"{set_operator_line(results, 3)}", f"{set_operator_line(results, 4)}",
+        f"{calculate_line(results, 0, 1, 2):>}", f"{calculate_line(results, 1, 1, 2):>}",
+        f"{calculate_line(results, 2, 1, 2):>}", f"{calculate_line(results, 3, 1, 2):>}",
+        f"{calculate_line(results, 4, 1, 2):>}",
+    ]
     # print(f"Statements: {statements}")
     _assist = {
         0: [0, len(solutions)],
@@ -366,7 +342,7 @@ def display_solutions_without_results(solutions: list) -> str:
     for k in _assist:
         statements_slice = statements[_assist[k][0]:_assist[k][1]]
         # print(f"Statements: {statements_slice}")
-        if [*_assist.keys()][-1] != k: # only add newline character if not last key
+        if [*_assist.keys()][-1] != k:  # only add newline character if not last key
             send += "    ".join(statements_slice)
             send += "\n"
         else:
@@ -394,9 +370,7 @@ def arithmetic_arranger(my_list: list, result: bool = False) -> any:
                 if digits_count_checker:
                     results = extract_digits(my_list)
                     try:
-                        if result:
-                            return display_solutions_with_results(results)
-                        return display_solutions_without_results(results)
+                        return run_app(result, results)
                     except TypeError as e_err:
                         print(f"Error: arithmetic arranger error {e_err}")
                 else:
@@ -407,3 +381,9 @@ def arithmetic_arranger(my_list: list, result: bool = False) -> any:
             return "Error: Operator must be '+' or '-'."
     else:
         return 'Error: Too many problems.'
+
+
+def run_app(result, results):
+    if result:
+        return display_solutions_with_results(results)
+    return display_solutions_without_results(results)
