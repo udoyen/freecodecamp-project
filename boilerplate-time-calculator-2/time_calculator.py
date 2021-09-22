@@ -34,7 +34,7 @@ def midday_status_helper(midday_status: str) -> str:
     midday status "PM" or "AM"
     :param midday_status:
     :type midday_status: str
-    :return: str
+    :rtype: str
     """
     if midday_status.upper() == 'PM':
         return 'AM'
@@ -49,7 +49,7 @@ def time_with_no_day(start: str, duration: str) -> str:
     :type start: str
     :param duration:
     :type duration: str
-    :return: str
+    :rtype: str
     """
     # "3:30 PM" and "33:33"
     #    3:00
@@ -106,9 +106,6 @@ def time_with_no_day(start: str, duration: str) -> str:
         else:
             return f"{new_time_hr}:{real_mins:02} {time_of_day}"
     else:
-        # real_mins = total_mins % 60
-        # extra_hours = round(total_mins / 60)
-
         real_duration = duration_hours
 
         # New main hour
@@ -155,7 +152,7 @@ def time_with_day(start: str, duration: str, day: str = None) -> str:
     :type duration: str
     :param day:
     :type day: str
-    :return: str
+    :rtype: str
     """
     # "3:30 PM" and "33:33"
     #    3:00
@@ -203,7 +200,8 @@ def time_with_day(start: str, duration: str, day: str = None) -> str:
             if real_duration / 24 >= 1:
                 if real_duration == 24:
                     midday_status = time_of_day
-                    return f"{new_time_hr}:{real_mins:02} {midday_status}, {week_days[week_days.index(day) + 1]} (next day)"
+                    return f"{new_time_hr}:{real_mins:02} {midday_status}, {week_days[week_days.index(day) + 1]}" \
+                           f" (next day)"
                 elif main_hour + (real_duration % 24) >= 12:
                     midday_status = midday_status_helper(time_of_day)
                     days = round(real_duration / 24) + 1
@@ -307,7 +305,6 @@ def time_with_day(start: str, duration: str, day: str = None) -> str:
                         n = week_days.index(i)
                         for j in range(0, week_days.index(day.capitalize()) + days):
                             if n == week_days.index(day.capitalize()) + days:
-                                print(f"Inside second break")
                                 current_day = i
                                 break
                             n += 7
@@ -362,7 +359,7 @@ def add_time(start: str, duration: str, day: str = None) -> callable:
     :type duration: str
     :param day:
     :type day: str
-    :return: callable
+    :rtype: callable
     """
     if day is None:
         return time_with_no_day(start, duration)

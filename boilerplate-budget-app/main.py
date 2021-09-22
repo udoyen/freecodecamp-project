@@ -5,8 +5,8 @@ from unittest import main
 
 food = budget.Category("Food")
 food.deposit(1000, "initial deposit")
-food.withdraw(10.15, "groceries")
-food.withdraw(15.89, "restaurant and more food for dessert")
+food.withdraw(10.15)
+food.withdraw(15.89)
 print(food.get_balance())
 clothing = budget.Category("Clothing")
 food.transfer(50, clothing)
