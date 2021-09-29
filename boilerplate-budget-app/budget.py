@@ -107,7 +107,7 @@ class Category:
 def split(word):
     """
     Helper function to
-    split catergory words
+    split category words
     :param word:
     :type: str
     :return:
