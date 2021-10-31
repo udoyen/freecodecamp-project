@@ -118,14 +118,14 @@ def time_with_no_day(start: str, duration: str) -> str:
                 new_time_hr = (real_duration + main_hour) % 12
 
         # Flip the PM or AM
-        if real_duration + main_hour > 12:
+        if (real_duration + main_hour) / 12 >= 1:
             # Check if it's just next day or n days
             if 0.20 < real_duration / 24 < 1:
                 midday_status = midday_status_helper(time_of_day)
                 flip = 'next day'
                 return f"{new_time_hr}:{total_mins:02} {midday_status} ({flip})"
             if real_duration / 24 < 0.20:
-                return f"{new_time_hr}:{total_mins:02} {time_of_day}"
+                return f"{new_time_hr}:{total_mins:02} {midday_status_helper(time_of_day)}"
             if real_duration / 24 >= 1:
                 if real_duration == 24:
                     midday_status = time_of_day
@@ -188,7 +188,7 @@ def time_with_day(start: str, duration: str, day: str = None) -> str:
                 new_time_hr = (real_duration + main_hour) % 12
 
         # Flip the PM or AM
-        if real_duration + main_hour > 12:
+        if (real_duration + main_hour) / 12 >= 1:
             # Check if it's just next day or n days
             if 0.20 < real_duration / 24 < 1:
                 midday_status = midday_status_helper(time_of_day)
@@ -269,7 +269,7 @@ def time_with_day(start: str, duration: str, day: str = None) -> str:
                 new_time_hr = (real_duration + main_hour) % 12
 
         # Flip the PM or AM
-        if real_duration + main_hour > 12:
+        if (real_duration + main_hour) / 12 >= 1:
             # Check if it's just next day or n days
             if 0.20 < real_duration / 24 < 1:
                 midday_status = midday_status_helper(time_of_day)
